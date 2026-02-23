@@ -1,0 +1,267 @@
+# minishell — To‑Do List (42 Project)
+
+Structured development checklist following 42 subject expectations.
+
+
+## 1. Things to fix in readline
+
+* [ ] Handle `Ctrl+D` (EOF)
+* [ ] Handle `Ctrl+C` (SIGINT)
+
+---
+
+## 2. Lexer (Tokenisation)
+
+* [ ] Split by spaces
+* [ ] Handle quotes
+
+  * [ ] single quotes `'`
+  * [ ] double quotes `"`
+* [ ] Handle escapes `\\`
+* [ ] Preserve spaces inside quotes
+* [ ] Detect operators
+
+  * [ ] `|`
+  * [ ] `<`
+  * [ ] `>`
+  * [ ] `<<`
+  * [ ] `>>`
+
+---
+
+## 3. Parser
+
+* [ ] Build token list
+* [ ] Build command structures
+* [ ] Pipes parsing
+* [ ] Redirection parsing
+* [ ] Heredoc parsing
+* [ ] Syntax error detection
+
+  * [ ] `||`
+  * [ ] `>>>`
+  * [ ] `| |`
+  * [ ] unclosed quotes
+
+---
+
+## 4. Environment Variables
+
+* [ ] Store env in linked list
+* [ ] `$VAR` expansion
+* [ ] `$?` expansion
+* [ ] Export formatting
+* [ ] Update env dynamically
+
+---
+
+## 5. Built‑ins (Mandatory)
+
+* [ ] `echo` (with `-n`)
+* [ ] `cd` (relative, absolute, `~`, `-`)
+* [ ] `pwd`
+* [ ] `export`
+* [ ] `unset`
+* [ ] `env`
+* [ ] `exit`
+
+---
+
+## 6. Execution Engine
+
+* [ ] PATH resolution
+* [ ] `fork()`
+* [ ] `execve()`
+* [ ] Pipe handling
+* [ ] Multiple pipes
+* [ ] Redirections
+
+  * [ ] input `<`
+  * [ ] output `>`
+  * [ ] append `>>`
+  * [ ] heredoc `<<`
+
+---
+
+## 7. Signals
+
+* [ ] SIGINT
+* [ ] SIGQUIT
+* [ ] Different behaviour for:
+
+  * [ ] parent
+  * [ ] child
+  * [ ] heredoc
+
+---
+
+## 8. Error Handling
+
+* [ ] Command not found
+* [ ] Permission denied
+* [ ] File not found
+* [ ] Syntax errors
+* [ ] Exit codes
+
+---
+
+## 9. Memory Management
+
+* [ ] No leaks
+* [ ] Free on exit
+* [ ] Free on Ctrl+D
+* [ ] Free on errors
+* [ ] Valgrind clean
+
+---
+
+## 10. Validation
+
+* [ ] Compare with bash
+* [ ] Edge cases
+* [ ] Stress tests
+* [ ] Invalid syntax tests
+* [ ] Norminette final check
+
+---
+
+## Development Order (Recommended)
+
+1. Prompt + readline
+2. History
+3. Lexer
+4. Parser
+5. Builtins
+6. Exec
+7. Pipes
+8. Redirections
+9. Env
+10. Signals
+11. Error handling
+12. Memory cleanup
+
+---
+
+## Built-ins (Mandatory)
+
+### echo
+
+* Syntax: `echo [-n] [string ...]`
+* Support multiple `-n` flags (`-n -n`)
+* No newline when `-n` is present
+* Variable expansion in `"`
+* No expansion in `'`
+
+**Function**
+
+```c
+int builtin_echo(char **args);
+```
+
+---
+
+### cd
+
+* `cd` → `$HOME`
+* `cd path`
+* `cd ..`
+* `cd .`
+* `cd -` → `$OLDPWD`
+* `~` expansion
+* Errors:
+
+  * no such file
+  * not a directory
+  * permission denied
+* Update env:
+
+  * `PWD`
+  * `OLDPWD`
+
+**Function**
+
+```c
+int builtin_cd(char **args, t_env *env);
+```
+
+---
+
+### pwd
+
+* Uses `getcwd()`
+* Absolute path
+* Error handling
+
+**Function**
+
+```c
+int builtin_pwd(void);
+```
+
+---
+
+### export
+
+* `export` → print env sorted
+* `export VAR=value`
+* `export VAR`
+* Identifier validation
+* Replace existing values
+* Dynamic env update
+* No spaces in keys
+
+**Function**
+
+```c
+int builtin_export(char **args, t_env *env);
+```
+
+---
+
+### unset
+
+* `unset VAR`
+* Multiple variables
+* Silent if not found
+* Identifier validation
+* Remove from env list
+
+**Function**
+
+```c
+int builtin_unset(char **args, t_env *env);
+```
+
+---
+
+### env
+
+* Print only variables with value
+* Format: `KEY=value`
+* Ignore args
+
+**Function**
+
+```c
+int builtin_env(t_env *env);
+```
+
+---
+
+### exit
+
+* `exit`
+* `exit code`
+* Numeric validation
+* Overflow detection
+* Too many args error
+* Correct exit status propagation
+
+**Function**
+
+```c
+int builtin_exit(char **args, t_shell *sh);
+```
+
+---
+
