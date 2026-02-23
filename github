@@ -1,0 +1,13 @@
+git clone https://github.com/Ourisan/minishell.git minishell
+
+To work from home
+git pull
+git checkout -b <branchname>
+Work
+git add .
+git commit -m "message"
+git push -u origin <branchname>
+
+To merge
+git checkout main
+git merge <branchname>

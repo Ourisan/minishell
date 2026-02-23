@@ -10,7 +10,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 2. Lexer (Tokenisation)
+## 2. Lexer (Tokenisation) (Axel)
 
 * [ ] Split by spaces
 * [ ] Handle quotes
@@ -29,7 +29,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 3. Parser
+## 3. Parser (Axel)
 
 * [ ] Build token list
 * [ ] Build command structures
@@ -45,7 +45,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 4. Environment Variables
+## 4. Environment Variables (Axel ?)
 
 * [ ] Store env in linked list
 * [ ] `$VAR` expansion
@@ -55,7 +55,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 5. Built‑ins (Mandatory)
+## 5. Built‑ins (Mandatory) (Louis)
 
 * [ ] `echo` (with `-n`)
 * [ ] `cd` (relative, absolute, `~`, `-`)
@@ -67,7 +67,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 6. Execution Engine
+## 6. Execution Engine (Louis)
 
 * [ ] PATH resolution
 * [ ] `fork()`
