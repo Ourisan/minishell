@@ -15,7 +15,9 @@ NAME		= minishell
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g3
 
-SRCS		= SRC/main.c
+SRCS		= SRC/main.c \
+			  SRC/lexer.c \
+			  SRC/token.c
 
 OBJS		= $(SRCS:.c=.o)
 
