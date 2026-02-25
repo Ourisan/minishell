@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajuvin <ajuvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 21:48:09 by ajuvin            #+#    #+#             */
-/*   Updated: 2025/11/15 00:15:35 by ajuvin           ###   ########.fr       */
+/*   Updated: 2026/02/25 19:24:29 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
-char	*ft_strdup(char *src);
+char	*ft_strdup(const char *src);
+char	*ft_strndup(const char *src, size_t n);
 char	*ft_strchr(const char *str, int c);
 char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *s, int fd);

@@ -20,6 +20,7 @@ LIBFT_SRCS	= SRC/ft_atoi.c \
 			  SRC/ft_split.c \
 			  SRC/ft_strchr.c \
 			  SRC/ft_strdup.c \
+			  SRC/ft_strndup.c \
 			  SRC/ft_striteri.c \
 			  SRC/ft_strjoin.c \
 			  SRC/ft_strlcat.c \
@@ -41,7 +42,7 @@ LIBFT_SRCS	= SRC/ft_atoi.c \
 			  SRC/ft_lstiter_bonus.c \
 			  SRC/ft_lstlast_bonus.c \
 			  SRC/ft_lstnew_bonus.c \
-			  SRC/ft_lstsize_bonus.c 
+			  SRC/ft_lstsize_bonus.c
 
 GNL_SRCS 	= SRC/GNL/get_next_line.c \
 			  SRC/GNL/get_next_line_utils.c

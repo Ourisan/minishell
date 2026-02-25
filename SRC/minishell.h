@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/02/23 18:24:58 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/02/25 19:18:47 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,18 @@ t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **lst, t_token *new);
 int		lexer(t_token **token, char *str);
 void	token_clear(t_token **lst);
+
+/* Env */
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+t_env	*env_find(t_env *env, char *key);
+void	env_set(t_env *env, char *key, char *value);
+t_env	*env_init(char **envp);
 
 #endif

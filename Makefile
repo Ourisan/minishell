@@ -6,7 +6,7 @@
 #    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/02/23 18:19:31 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/02/25 19:29:19 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,9 @@ CFLAGS		= -Wall -Wextra -Werror -g3
 
 SRCS		= SRC/main.c \
 			  SRC/lexer.c \
-			  SRC/token.c
+			  SRC/token.c \
+			  SRC/builtins.c \
+			  SRC/env.c
 
 OBJS		= $(SRCS:.c=.o)
 
@@ -31,9 +33,6 @@ $(NAME): $(OBJS) $(LIBFT)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
-
-%.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
