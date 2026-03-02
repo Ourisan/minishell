@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/02/25 19:09:03 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/02 17:10:43 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@ int	main(int argc, char **argv, char **envp)
 	rl = "";
 	token = NULL;
 	env_list = env_init(envp);
-	while ((ft_strncmp(rl, "exit", ft_strlen(rl)) || ft_strlen(rl) != 4)
-			|| !ft_strlen(rl))
+	while (ft_strcmp(rl, "exit"))
 	{
 		if (token)
 			token_clear(&token);
 		rl = readline("minishell$> ");
 		if (rl && *rl)
 			add_history(rl);
+		if (ft_strncmp(rl, "export", 6) == 0)
+			builtin_export(ft_split(rl, ' '), env_list);
 		if (!lexer(&token, rl))
 			token_clear(&token);
 	}

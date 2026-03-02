@@ -27,6 +27,7 @@ LIBFT_SRCS	= SRC/ft_atoi.c \
 			  SRC/ft_strlcpy.c \
 			  SRC/ft_strlen.c \
 			  SRC/ft_strmapi.c \
+			  SRC/ft_strcmp.c \
 			  SRC/ft_strncmp.c \
 			  SRC/ft_strnstr.c \
 			  SRC/ft_strrchr.c \

@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 16:29:34 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/02/25 19:36:11 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:16:51 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ t_env	*env_new(char *key, char *value)
 	if (!env)
 		return (0);
 	env->key = ft_strdup(key);
-	env->value = ft_strdup(value);
+	if (value)
+		env->value = ft_strdup(value);
+	else
+		env->value = NULL;
 	env->next = NULL;
 	return (env);
 }
@@ -50,18 +53,23 @@ t_env	*env_find(t_env *env, char *key)
 	return NULL;
 }
 
-void	env_set(t_env *env, char *key, char *value)
+void	env_set(t_env **env, char *key, char *value, int append)
 {
-	t_env *e;
+	t_env	*e;
+	char	*new_value;
 
-	e = env_find(env, key);
+	e = env_find(*env, key);
 	if (e)
 	{
+		if (append)
+			new_value = ft_strjoin(e->value, value);
+		else
+			new_value = value;
 		free(e->value);
-		e->value = value;
+		e->value = new_value;
 	}
 	else
-		env_add_back(&env, env_new(key, value));
+		env_add_back(env, env_new(key, value));
 }
 
 t_env	*env_init(char **envp)

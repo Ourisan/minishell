@@ -6,7 +6,7 @@
 #    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/02/25 19:29:19 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/03/02 16:58:36 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS		= SRC/main.c \
 			  SRC/lexer.c \
 			  SRC/token.c \
 			  SRC/builtins.c \
+			  SRC/builtins_utils.c \
 			  SRC/env.c
 
 OBJS		= $(SRCS:.c=.o)

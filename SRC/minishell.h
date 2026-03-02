@@ -6,16 +6,18 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/02/25 19:18:47 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:50:51 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../LIBFT/SRC/libft.h"
+# include <linux/limits.h>
 
 /* lexer */
 typedef enum e_token_type
@@ -50,7 +52,16 @@ typedef struct s_env
 }	t_env;
 
 t_env	*env_find(t_env *env, char *key);
-void	env_set(t_env *env, char *key, char *value);
+void	env_set(t_env **env, char *key, char *value, int append);
 t_env	*env_init(char **envp);
+
+/* Built-ins */
+int	builtin_echo(char **args);
+int	builtin_cd(char **args, t_env *env);
+int	builtin_pwd(void);
+int	builtin_export(char **args, t_env *env);
+
+/* Built-ins utils */
+int is_valid_identifier(const char *s);
 
 #endif
