@@ -16,9 +16,11 @@ int	main(void)
 {
 	char	*rl;
 	t_token *token;
+	t_cmd	*cmds;
 
 	rl = "";
 	token = NULL;
+	cmds = NULL;
 	while ((ft_strncmp(rl, "exit", ft_strlen(rl)) || ft_strlen(rl) != 4)
 			|| !ft_strlen(rl))
 	{
@@ -29,6 +31,10 @@ int	main(void)
 			add_history(rl);
 		if (!lexer(&token, rl))
 			token_clear(&token);
+		parser_init(&cmds, token);
+		if (!cmds)
+			return (1);
+		cmds_clear(&cmds);
 	}
 	return (0);
 }

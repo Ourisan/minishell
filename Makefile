@@ -17,6 +17,9 @@ CFLAGS		= -Wall -Wextra -Werror -g3
 
 SRCS		= SRC/main.c \
 			  SRC/lexer.c \
+			  SRC/parsing.c \
+			  SRC/parsing_list.c \
+			  SRC/parsing_check.c \
 			  SRC/token.c
 
 OBJS		= $(SRCS:.c=.o)
