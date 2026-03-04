@@ -36,11 +36,36 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 }	t_token;
+/* parser */
+
+typedef struct s_redir
+{
+	t_token_type		type;
+	char				*target;
+	struct s_redir		*next;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char			**argv;
+	t_redir			*redir;
+	struct s_cmd	*next;
+}	t_cmd;
 
 t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **lst, t_token *new);
 int		lexer(t_token **token, char *str);
 void	token_clear(t_token **lst);
+t_cmd	*cmd_new(void);
+void	argv_add(char ***argv, char *value);
+void	redir_add(t_redir **list, t_token_type type, char *target);
+void	cmd_add_back(t_cmd **list, t_cmd *new);
+int		check_pipe(t_token *tokens);
+int		check_redir(t_token *tokens);
+int		check_heredoc(t_token *tokens);
+int		check_cmd(t_token *tokens);
+void	parser_init(t_cmd **cmds, t_token *tokens);
+void	cmds_clear(t_cmd **cmds);
 
 /* Env */
 

@@ -6,7 +6,7 @@
 #    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/02 16:58:36 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/03/04 16:49:12 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,9 @@ CFLAGS		= -Wall -Wextra -Werror -g3
 SRCS		= SRC/main.c \
 			  SRC/lexer.c \
 			  SRC/token.c \
+			  SRC/parsing.c \
+			  SRC/parsing_list.c \
+			  SRC/parsing_check.c \
 			  SRC/builtins.c \
 			  SRC/builtins_utils.c \
 			  SRC/env.c
