@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:40 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/04 16:51:41 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 01:41:37 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	check_redir(t_token *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		if (tmp->type == TOKEN_REDIR_IN || tmp->type == TOKEN_REDIR_OUT ||
-			tmp->type == TOKEN_APPEND)
+		if (tmp->type == TOKEN_REDIR_IN || tmp->type == TOKEN_REDIR_OUT
+			|| tmp->type == TOKEN_APPEND)
 		{
 			if (!tmp->next || tmp->next->type != TOKEN_WORD)
 			{
@@ -92,4 +92,3 @@ int	check_cmd(t_token *tokens)
 		return (1);
 	return (0);
 }
-

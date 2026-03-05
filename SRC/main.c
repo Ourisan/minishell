@@ -6,11 +6,26 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/04 16:50:20 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:00:44 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	builtin_cmd(char *cmd, char **argv, t_env *env)
+{
+	if (!cmd)
+		return (0);
+	if (!ft_strcmp(cmd, "echo"))
+		return (builtin_echo(argv), 0);
+	if (!ft_strcmp(cmd, "cd"))
+		return (builtin_cd(argv, env), 0);
+	if (!ft_strcmp(cmd, "pwd"))
+		return (builtin_pwd(), 0);
+	if (!ft_strcmp(cmd, "export"))
+		return (builtin_export(argv, env), 0);
+	return (1);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -29,16 +44,18 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (token)
 			token_clear(&token);
-		rl = readline("minishell$> ");
+		rl = readline(shell_prompt(env_find(env_list, "PWD")->value));
 		if (rl && *rl)
 			add_history(rl);
-		if (ft_strncmp(rl, "export", 6) == 0)
-			builtin_export(ft_split(rl, ' '), env_list);
 		if (!lexer(&token, rl))
 			token_clear(&token);
 		parser_init(&cmds, token);
-		if (!cmds)
-			return (1);
+		if (cmds)
+		{
+			if (!builtin_cmd(cmds->argv[0], cmds->argv, env_list))
+			{
+			}
+		}
 		cmds_clear(&cmds);
 	}
 	return (0);

@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/05 01:01:27 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 01:01:27 by lde-plac         ###   ########.fr       */
+/*   Created: 2026/03/05 01:55:23 by lde-plac          #+#    #+#             */
+/*   Updated: 2026/03/05 01:59:30 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-long	ft_atol(const char *str)
+char	*shell_prompt(char *pwd)
 {
+	char	*prompt;
 	int		i;
-	long	res;
-	long	sign;
+	int		j;
 
 	i = 0;
-	res = 0;
-	sign = 1;
-	if (str[i] == '-' || str[i] == '+')
+	j = 0;
+	while (pwd[i])
 	{
-		if (str[i] == '-')
-			sign = -1;
+		if (pwd[i] == '/')
+			j = i;
 		i++;
 	}
-	while (ft_isdigit(str[i]) == 1)
-	{
-		res = 10 * res + (str[i] - '0');
-		i++;
-	}
-	return (res * sign);
+	prompt = ft_strjoin(&pwd[j + 1], "$> ");
+	return (prompt);
 }

@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/02 18:50:51 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:08:11 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include "../LIBFT/SRC/libft.h"
 # include <linux/limits.h>
 
-/* lexer */
+/* Utils*/
+char	*shell_prompt(char *pwd);
+
+/* Lexer */
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -36,8 +39,8 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 }	t_token;
-/* parser */
 
+/* Parser */
 typedef struct s_redir
 {
 	t_token_type		type;
@@ -60,15 +63,11 @@ t_cmd	*cmd_new(void);
 void	argv_add(char ***argv, char *value);
 void	redir_add(t_redir **list, t_token_type type, char *target);
 void	cmd_add_back(t_cmd **list, t_cmd *new);
-int		check_pipe(t_token *tokens);
-int		check_redir(t_token *tokens);
-int		check_heredoc(t_token *tokens);
 int		check_cmd(t_token *tokens);
 void	parser_init(t_cmd **cmds, t_token *tokens);
 void	cmds_clear(t_cmd **cmds);
 
 /* Env */
-
 typedef struct s_env
 {
 	char			*key;
@@ -81,12 +80,13 @@ void	env_set(t_env **env, char *key, char *value, int append);
 t_env	*env_init(char **envp);
 
 /* Built-ins */
-int	builtin_echo(char **args);
-int	builtin_cd(char **args, t_env *env);
-int	builtin_pwd(void);
-int	builtin_export(char **args, t_env *env);
+int		builtin_echo(char **args);
+int		builtin_cd(char **args, t_env *env);
+int		builtin_pwd(void);
+int		builtin_export(char **args, t_env *env);
 
 /* Built-ins utils */
-int is_valid_identifier(const char *s);
+int		is_valid_identifier(const char *s);
+char	*var_expansion(char *var, t_env *env);
 
 #endif

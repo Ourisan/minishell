@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:39:35 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/02 19:28:08 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:08:52 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ int	builtin_cd(char **args, t_env *env)
 			return (ft_printf("cd: HOME not set\n"), 0);
 		path = tmp->value;
 	}
-	else if (ft_strcmp(args[1], "-"))
+	else if (!ft_strcmp(args[1], "-"))
 	{
 		tmp = env_find(env, "OLDPWD");
 		if (!tmp || !tmp->value)
 			return (ft_printf("cd: OLDPWD not set\n"), 0);
-		path = tmp->value;
+		path = ft_strdup(tmp->value);
 		ft_printf("%s\n", path);
 	}
 	else
-		path = args[1];
+		path = var_expansion(args[1], env);
 	tmp = env_find(env, "PWD");
 	if (tmp && tmp->value)
 		env_set(&env, "OLDPWD", tmp->value, 0);

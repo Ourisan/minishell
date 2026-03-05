@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:27 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/04 16:51:30 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 01:38:30 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	parser(t_token *tokens, t_cmd *current, t_cmd **cmds)
 	{
 		if (tmp->type == TOKEN_WORD)
 			argv_add(&current->argv, tmp->value);
-		else if(tmp->type == TOKEN_REDIR_IN || tmp->type == TOKEN_REDIR_OUT ||
-				tmp->type == TOKEN_APPEND || tmp->type == TOKEN_HEREDOC)
+		else if (tmp->type == TOKEN_REDIR_IN || tmp->type == TOKEN_REDIR_OUT
+			|| tmp->type == TOKEN_APPEND || tmp->type == TOKEN_HEREDOC)
 		{
 			redir_add(&current->redir, tmp->type, tmp->next->value);
 			tmp = tmp->next;

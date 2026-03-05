@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 19:20:35 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/02/25 19:23:44 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 01:38:08 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 char	*ft_strndup(const char *src, size_t n)
 {
 	char	*dest;
-	size_t  len;
-	size_t  i;
+	size_t	len;
+	size_t	i;
 
 	len = 0;
 	while (src[len] && len < n)
@@ -33,4 +33,3 @@ char	*ft_strndup(const char *src, size_t n)
 	dest[i] = '\0';
 	return (dest);
 }
-

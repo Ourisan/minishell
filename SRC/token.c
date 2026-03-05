@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/05 01:01:13 by lde-plac          #+#    #+#             */
+/*   Updated: 2026/03/05 01:38:24 by lde-plac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_token	*token_new(char *value, t_token_type type)
@@ -35,7 +47,7 @@ void	token_clear(t_token **lst)
 	t_token	*tmp;
 
 	if (!lst)
-		return;
+		return ;
 	while (*lst)
 	{
 		tmp = (*lst)->next;

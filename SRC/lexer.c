@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/05 01:01:04 by lde-plac          #+#    #+#             */
+/*   Updated: 2026/03/05 01:39:08 by lde-plac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	handle_op(char *str, t_token **token)
@@ -30,7 +42,7 @@ int	handle_op(char *str, t_token **token)
 
 int	handle_pipe(t_token **token)
 {
-	char *wrd;
+	char	*wrd;
 
 	wrd = ft_substr("|", 0, 1);
 	if (!wrd)
@@ -45,9 +57,9 @@ int	handle_word(char *str, t_token **token)
 	char	*wrd;
 
 	i = 0;
-	while (str[i] && str[i] != '<' && str[i] != '>' &&
-			str[i] != '"' && str[i] != '\'' &&
-			str[i] != ' ' && str[i] != '\t')
+	while (str[i] && str[i] != '<' && str[i] != '>'
+		&& str[i] != '"' && str[i] != '\''
+		&& str[i] != ' ' && str[i] != '\t')
 		i++;
 	wrd = ft_substr(str, 0, i);
 	if (!wrd)

@@ -6,29 +6,30 @@
 #    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/04 16:49:12 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/03/05 02:01:47 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= minishell
+NAME		=	minishell
 
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
+CC			=	cc
+CFLAGS		=	-Wall -Wextra -Werror -g3
 
-SRCS		= SRC/main.c \
-			  SRC/lexer.c \
-			  SRC/token.c \
-			  SRC/parsing.c \
-			  SRC/parsing_list.c \
-			  SRC/parsing_check.c \
-			  SRC/builtins.c \
-			  SRC/builtins_utils.c \
-			  SRC/env.c
+SRCS		=	SRC/main.c \
+				SRC/utils.c \
+				SRC/lexer.c \
+				SRC/token.c \
+				SRC/parsing.c \
+				SRC/parsing_list.c \
+				SRC/parsing_check.c \
+				SRC/builtins.c \
+				SRC/builtins_utils.c \
+				SRC/env.c
 
-OBJS		= $(SRCS:.c=.o)
+OBJS		=	$(SRCS:.c=.o)
 
-LIBFT_DIR	= LIBFT
-LIBFT		= $(LIBFT_DIR)/libft.a
+LIBFT_DIR	=	LIBFT
+LIBFT		=	$(LIBFT_DIR)/libft.a
 
 all: $(NAME)
 
