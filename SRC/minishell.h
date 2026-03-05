@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 02:08:11 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 19:09:51 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ int		builtin_echo(char **args);
 int		builtin_cd(char **args, t_env *env);
 int		builtin_pwd(void);
 int		builtin_export(char **args, t_env *env);
+int		builtin_unset(char	**args, t_env **env);
+int		builtin_env(t_env *env);
+int		builtin_exit(char **args);
 
 /* Built-ins utils */
 int		is_valid_identifier(const char *s);

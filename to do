@@ -45,7 +45,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 4. Environment Variables (Axel ?)
+## 4. Environment Variables (Louis)
 
 * [ ] Store env in linked list
 * [ ] `$VAR` expansion
@@ -67,7 +67,7 @@ Structured development checklist following 42 subject expectations.
 
 ---
 
-## 6. Execution Engine (Louis)
+## 6. Execution Engine (Louis & Axel)
 
 * [ ] PATH resolution
 * [ ] `fork()`

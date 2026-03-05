@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 02:00:44 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 19:09:43 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,32 @@
 int	builtin_cmd(char *cmd, char **argv, t_env *env)
 {
 	if (!cmd)
-		return (0);
+		return (1);
 	if (!ft_strcmp(cmd, "echo"))
-		return (builtin_echo(argv), 0);
+		return (builtin_echo(argv));
 	if (!ft_strcmp(cmd, "cd"))
-		return (builtin_cd(argv, env), 0);
+		return (builtin_cd(argv, env));
 	if (!ft_strcmp(cmd, "pwd"))
-		return (builtin_pwd(), 0);
+		return (builtin_pwd());
 	if (!ft_strcmp(cmd, "export"))
-		return (builtin_export(argv, env), 0);
-	return (1);
+		return (builtin_export(argv, env));
+	if (!ft_strcmp(cmd, "unset"))
+		return (builtin_unset(argv, &env));
+	if (!ft_strcmp(cmd, "env"))
+		return (builtin_env(env));
+	if (!ft_strcmp(cmd, "exit"))
+		return (builtin_exit(argv));
+	return (0);
+}
+
+int	is_builtin_cmd(char *cmd)
+{
+	if (!cmd)
+		return (1);
+	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "exit"));
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -40,7 +56,7 @@ int	main(int argc, char **argv, char **envp)
 	token = NULL;
 	cmds = NULL;
 	env_list = env_init(envp);
-	while (ft_strcmp(rl, "exit"))
+	while (1)
 	{
 		if (token)
 			token_clear(&token);
@@ -52,9 +68,8 @@ int	main(int argc, char **argv, char **envp)
 		parser_init(&cmds, token);
 		if (cmds)
 		{
-			if (!builtin_cmd(cmds->argv[0], cmds->argv, env_list))
-			{
-			}
+			if (is_builtin_cmd(cmds->argv[0]))
+				builtin_cmd(cmds->argv[0], cmds->argv, env_list);
 		}
 		cmds_clear(&cmds);
 	}
