@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:01:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 01:39:08 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 16:18:54 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	handle_quote(char *str, t_token **token)
 	while (str[i] && str[i] != quote)
 		i++;
 	if (str[i] != quote)
-		return (perror("syntax error: quote not closed\n"), 0);
+		return (ft_printf_fd(2, "syntax error: quote not closed\n"), 0);
 	wrd = ft_substr(str, 1, i - 1);
 	if (!wrd)
 		return (0);

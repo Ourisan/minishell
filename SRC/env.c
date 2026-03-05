@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 16:29:34 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 01:39:24 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/05 03:48:34 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_env	*env_find(t_env *env, char *key)
 {
 	while (env)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)
+		if (!ft_strcmp(env->key, key))
 			return (env);
 		env = env->next;
 	}
