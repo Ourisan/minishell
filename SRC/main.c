@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 19:09:43 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/07 17:30:56 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,17 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (is_builtin_cmd(cmds->argv[0]))
 				builtin_cmd(cmds->argv[0], cmds->argv, env_list);
+			else
+			{
+				// pid = fork();
+				// if (pid == 0)
+				// {
+				// 	execve(path, args, env_list);
+				// 	perror("execve");
+				// 	exit(1);
+				// }
+				// waitpid(pid, &status, 0);
+			}
 		}
 		cmds_clear(&cmds);
 	}

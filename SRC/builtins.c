@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:39:35 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 18:55:25 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/07 17:31:47 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	builtin_export(char **args, t_env *env)
 	{
 		while (env)
 		{
-			ft_printf("%s=%s\n", env->key, env->value);
+			ft_printf("declare -x %s=%s\n", env->key, env->value);
 			env = env->next;
 		}
 	}
