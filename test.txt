@@ -4,10 +4,10 @@ ALL:
     Make sure all error messages are correct (command not found, ...)
     Check for leaks
     Store status of last command in a var
-    Check if var expansion works
+    Double check if var expansion works
 
-MAIN:
-    test Ctrl+C and Ctrl+D
+SIGNALS:
+    handle Ctrl+C
 
 PARSER:
     manage \"

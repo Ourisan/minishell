@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+         #
+#    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/11 17:58:15 by ourisan          ###   ########.fr        #
+#    Updated: 2026/03/12 23:08:53 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS		=	SRC/main.c \
 				SRC/parsing_list.c \
 				SRC/parsing_check.c \
 				SRC/builtins.c \
+				SRC/builtins_env.c \
 				SRC/builtins_utils.c \
 				SRC/env.c
 

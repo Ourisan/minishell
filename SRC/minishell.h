@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/11 19:16:59 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/13 00:26:13 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 # include <linux/limits.h>
 
 /* Executor */
-void	executor(t_cmd *cmds, t_env *env);
+void	executor(t_cmd *cmds, t_shell *shell);
 
 /* Redir */
 void	redir(t_redir *redir);
 
 /* Utils*/
+char	*var_expansion(char *var, t_shell *shell);
 char	**env_to_array(t_env *env);
 char	*exec_path(char	*cmd, t_env *env);
 char	*shell_prompt(char *pwd);
@@ -60,10 +61,12 @@ int		builtin_pwd(void);
 int		builtin_export(char **args, t_env *env);
 int		builtin_unset(char	**args, t_env **env);
 int		builtin_env(t_env *env);
-int		builtin_exit(char **args);
+int		builtin_exit(char **args, t_shell *shell);
 
 /* Built-ins utils */
+void	export_env(char *arg, t_env *env, int *status);
+void	env_remove(char **args, t_env **env, int i);
+int		change_path(t_env *env, char *path);
 int		is_valid_identifier(const char *s);
-char	*var_expansion(char *var, t_env *env);
 
 #endif
