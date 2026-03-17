@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_struct.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:01:44 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/12 17:23:46 by ajuvin           ###   ########.fr       */
+/*   Updated: 2026/03/17 17:38:01 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,18 @@ typedef struct s_cmd
 }	t_cmd;
 
 /* Env */
+
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_shell
+{
+	t_env	*env;
+	int		last_status;
+}	t_shell;
 
 #endif

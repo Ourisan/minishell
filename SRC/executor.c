@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/12 17:32:29 by ajuvin           ###   ########.fr       */
+/*   Updated: 2026/03/17 17:37:59 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_cmd(char *cmd, char **argv, t_env *env)
+int	builtin_cmd(char *cmd, char **argv, t_shell *shell)
 {
 	if (!cmd)
 		return (1);
 	if (!ft_strcmp(cmd, "echo"))
 		return (builtin_echo(argv));
 	if (!ft_strcmp(cmd, "cd"))
-		return (builtin_cd(argv, env));
+		return (builtin_cd(argv, shell->env));
 	if (!ft_strcmp(cmd, "pwd"))
 		return (builtin_pwd());
 	if (!ft_strcmp(cmd, "export"))
-		return (builtin_export(argv, env));
+		return (builtin_export(argv, shell->env));
 	if (!ft_strcmp(cmd, "unset"))
-		return (builtin_unset(argv, &env));
+		return (builtin_unset(argv, &shell->env));
 	if (!ft_strcmp(cmd, "env"))
-		return (builtin_env(env));
+		return (builtin_env(shell->env));
 	if (!ft_strcmp(cmd, "exit"))
-		return (builtin_exit(argv));
+		return (builtin_exit(argv, shell));
 	return (0);
 }
 
@@ -43,8 +43,10 @@ int	is_builtin_cmd(char *cmd)
 		|| !ft_strcmp(cmd, "exit"));
 }
 
-void	child_process(t_cmd *cmds, t_env *env, int *pipefd, int prev_fd)
+void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 {
+	char	*path;
+
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -58,22 +60,29 @@ void	child_process(t_cmd *cmds, t_env *env, int *pipefd, int prev_fd)
 	}
 	redir_exec(cmds->redir);
 	if (is_builtin_cmd(cmds->argv[0]))
-		{
-			builtin_cmd(cmds->argv[0], cmds->argv, env);
-			exit(1);
-		}
-	else if (exec_path(cmds->argv[0], env))
 	{
-		execve(exec_path(cmds->argv[0], env), cmds->argv, env_to_array(env));
+		builtin_cmd(cmds->argv[0], cmds->argv, shell);
+		exit(1);
+	}
+	path = exec_path(cmds->argv[0], shell->env);
+	if (path)
+	{
+		execve(path, cmds->argv, env_to_array(shell->env));
 		perror("execve");
+		exit(1);
+	}
+	else
+	{
+		ft_printf_fd(2, "%s: command not found\n", cmds->argv[0]);
 		exit(1);
 	}
 }
 
-void	pipe_executor(t_cmd *cmds, t_env *env)
+void	pipe_executor(t_cmd *cmds, t_shell *shell)
 {
 	int		pipefd[2];
 	int		prev_fd;
+	int		status;
 	pid_t	pid_son;
 
 	prev_fd = -1;
@@ -89,7 +98,7 @@ void	pipe_executor(t_cmd *cmds, t_env *env)
 		if (pid_son < 0)
 			return (perror("fork"));
 		if (pid_son == 0)
-			child_process(cmds, env, pipefd, prev_fd);
+			child_process(cmds, shell, pipefd, prev_fd);
 		if (prev_fd != -1)
 			close(prev_fd);
 		if (cmds->next)
@@ -99,17 +108,18 @@ void	pipe_executor(t_cmd *cmds, t_env *env)
 		}
 		cmds = cmds->next;
 	}
-	waitpid(pid_son, NULL, 0);
+	waitpid(pid_son, &status, 0);
+	shell->last_status = WEXITSTATUS(status);
 }
 
-void	executor(t_cmd *cmds, t_env *env)
+void	executor(t_cmd *cmds, t_shell *shell)
 {
 	if (!cmds || !cmds->argv || !cmds->argv[0])
-        return ;
+		return ;
 	if (is_builtin_cmd(cmds->argv[0]) && !cmds->next && !cmds->redir)
 	{
-		builtin_cmd(cmds->argv[0], cmds->argv, env);
+		shell->last_status = builtin_cmd(cmds->argv[0], cmds->argv, shell);
 		return ;
 	}
-	pipe_executor(cmds, env);
+	pipe_executor(cmds, shell);
 }
