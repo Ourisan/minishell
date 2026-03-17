@@ -6,7 +6,7 @@
 /*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:01:44 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/11 18:16:02 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/12 17:23:46 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	t_token_type		type;
+	int					fd;
 	char				*target;
 	struct s_redir		*next;
 }	t_redir;

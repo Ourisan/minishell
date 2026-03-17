@@ -18,3 +18,7 @@ EXECVE:
 REDIR :
     heredoc combine with pipe, (separer open() et dup2())
     remove EOF at the end of heredoc
+    multiple heredoc
+
+TEST hS :
+    echo << EOF | wc -l > count.txt

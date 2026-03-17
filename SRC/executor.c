@@ -6,7 +6,7 @@
 /*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/11 20:00:34 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/12 17:32:29 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	child_process(t_cmd *cmds, t_env *env, int *pipefd, int prev_fd)
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	redir(cmds->redir);
+	redir_exec(cmds->redir);
 	if (is_builtin_cmd(cmds->argv[0]))
 		{
 			builtin_cmd(cmds->argv[0], cmds->argv, env);
@@ -79,6 +79,7 @@ void	pipe_executor(t_cmd *cmds, t_env *env)
 	prev_fd = -1;
 	while (cmds)
 	{
+		redir_open(cmds->redir);
 		if (cmds->next)
 		{
 			if (pipe(pipefd) == -1)

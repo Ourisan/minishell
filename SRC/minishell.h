@@ -6,7 +6,7 @@
 /*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/11 19:16:59 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/12 17:32:46 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 void	executor(t_cmd *cmds, t_env *env);
 
 /* Redir */
-void	redir(t_redir *redir);
+void	redir_open(t_redir *redir);
+void	redir_exec(t_redir *redir);
 
 /* Utils*/
 char	**env_to_array(t_env *env);
