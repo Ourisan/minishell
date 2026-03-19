@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/19 16:53:37 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:25:22 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 	child_cmd(cmds, shell);
 }
 
-void	pipe_exec(t_cmd *cmds, pid_t pid_son, t_shell *shell)
+void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell)
 {
 	int		prev_fd;
 	int		pipefd[2];
@@ -63,10 +63,10 @@ void	pipe_exec(t_cmd *cmds, pid_t pid_son, t_shell *shell)
 		if (pipe(pipefd) == -1)
 			return (perror("pipe"));
 	}
-	pid_son = fork();
-	if (pid_son < 0)
+	*pid_son = fork();
+	if ((*pid_son) < 0)
 		return (perror("fork"));
-	if (pid_son == 0)
+	if ((*pid_son) == 0)
 		child_process(cmds, shell, pipefd, prev_fd);
 	if (prev_fd != -1)
 		close(prev_fd);
@@ -92,7 +92,7 @@ void	exec(t_cmd *cmds, t_shell *shell)
 	while (cmds)
 	{
 		redir_open(cmds->redir);
-		pipe_exec(cmds, pid_son, shell);
+		pipe_exec(cmds, &pid_son, shell);
 		cmds = cmds->next;
 	}
 	waitpid(pid_son, &status, 0);
