@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/11 19:16:59 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/19 16:46:58 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,19 @@
 # include "../LIBFT/SRC/libft.h"
 # include <linux/limits.h>
 
-/* Executor */
-void	executor(t_cmd *cmds, t_env *env);
+/* Exec */
+void	exec(t_cmd *cmds, t_shell *shell);
+
+/* Exec Utils*/
+int		builtin_cmd(char *cmd, char **argv, t_shell *shell);
+int		is_builtin_cmd(char *cmd);
 
 /* Redir */
-void	redir(t_redir *redir);
+void	redir_open(t_redir *r);
+void	redir_exec(t_redir *r);
 
 /* Utils*/
+char	*var_expansion(char *var, t_shell *shell);
 char	**env_to_array(t_env *env);
 char	*exec_path(char	*cmd, t_env *env);
 char	*shell_prompt(char *pwd);
@@ -36,8 +42,8 @@ char	*shell_prompt(char *pwd);
 /* Lexer */
 t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **lst, t_token *new);
-int		lexer(t_token **token, char *str);
 void	token_clear(t_token **lst);
+int		lexer(t_token **token, char *str, t_shell *shell);
 
 /* Parser */
 t_cmd	*cmd_new(void);
@@ -60,10 +66,12 @@ int		builtin_pwd(void);
 int		builtin_export(char **args, t_env *env);
 int		builtin_unset(char	**args, t_env **env);
 int		builtin_env(t_env *env);
-int		builtin_exit(char **args);
+int		builtin_exit(char **args, t_shell *shell);
 
 /* Built-ins utils */
+void	export_env(char *arg, t_env *env, int *status);
+void	env_remove(char **args, t_env **env, int i);
+int		change_path(t_env *env, char *path);
 int		is_valid_identifier(const char *s);
-char	*var_expansion(char *var, t_env *env);
 
 #endif

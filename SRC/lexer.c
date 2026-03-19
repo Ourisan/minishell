@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:01:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 16:18:54 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:43:19 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	handle_pipe(t_token **token)
 	return (1);
 }
 
-int	handle_word(char *str, t_token **token)
+int	handle_word(char *str, t_token **token, t_shell *shell)
 {
 	int		i;
 	char	*wrd;
@@ -64,11 +64,12 @@ int	handle_word(char *str, t_token **token)
 	wrd = ft_substr(str, 0, i);
 	if (!wrd)
 		return (0);
+	wrd = var_expansion(wrd, shell);
 	token_add_back(token, token_new(wrd, TOKEN_WORD));
 	return (i);
 }
 
-int	handle_quote(char *str, t_token **token)
+int	handle_quote(char *str, t_token **token, t_shell *shell)
 {
 	int		i;
 	char	*wrd;
@@ -84,11 +85,13 @@ int	handle_quote(char *str, t_token **token)
 	wrd = ft_substr(str, 1, i - 1);
 	if (!wrd)
 		return (0);
+	if (quote != '\'')
+		wrd = var_expansion(wrd, shell);
 	token_add_back(token, token_new(wrd, TOKEN_WORD));
 	return (i + 1);
 }
 
-int	lexer(t_token **token, char *str)
+int	lexer(t_token **token, char *str, t_shell *shell)
 {
 	int	i;
 	int	j;
@@ -104,9 +107,9 @@ int	lexer(t_token **token, char *str)
 		else if (str[i] == '|')
 			i += handle_pipe(token);
 		else if (str[i] == '"' || str[i] == '\'')
-			i += handle_quote(&str[i], token);
+			i += handle_quote(&str[i], token, shell);
 		else
-			i += handle_word(&str[i], token);
+			i += handle_word(&str[i], token, shell);
 		if (i <= j)
 			return (0);
 	}

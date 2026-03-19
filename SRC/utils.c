@@ -3,14 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:55:23 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/11 18:47:24 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/19 16:08:33 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	expand_var(char **new_var, t_shell *shell, int i, int j)
+{
+	char	*l;
+	char	*r;
+	char	*tmp;
+
+	if ((*new_var)[i + 1] == '?')
+	{
+		l = ft_strndup((*new_var), i);
+		r = ft_strdup(&(*new_var)[i + 2]);
+		(*new_var) = ft_strjoin(l, ft_strjoin(ft_itoa(shell->last_status), r));
+		free(l);
+		free(r);
+	}
+	else
+	{
+		while ((*new_var)[j] && (*new_var)[j] != '/' && (*new_var)[j] != ' ')
+			j++;
+		l = ft_strndup((*new_var), i);
+		r = ft_strdup(&(*new_var)[j]);
+		tmp = ft_strndup(&(*new_var)[i + 1], j - i - 1);
+		tmp = env_find(shell->env, tmp)->value;
+		(*new_var) = ft_strjoin(l, ft_strjoin(tmp, r));
+		free(l);
+		free(r);
+	}
+}
+
+char	*var_expansion(char *var, t_shell *shell)
+{
+	int		i;
+	char	*home;
+	char	*new_var;
+
+	i = 0;
+	if (var[0] != '~' && !ft_strchr(var, '$'))
+		return (var);
+	new_var = ft_strdup(var);
+	while (new_var[i])
+	{
+		if (i == 0 && new_var[i] == '~')
+		{
+			home = env_find(shell->env, "HOME")->value;
+			new_var = ft_strjoin(home, &new_var[1]);
+		}
+		if (new_var[i] == '$' && new_var[i + 1] && new_var[i + 1] != ' ')
+		{
+			expand_var(&new_var, shell, i, i);
+		}
+		i++;
+	}
+	return (new_var);
+}
 
 char	**env_to_array(t_env *env)
 {
