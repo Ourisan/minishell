@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 16:46:58 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:36:48 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdio.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../LIBFT/SRC/libft.h"

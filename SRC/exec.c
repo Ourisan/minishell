@@ -6,11 +6,17 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/19 17:25:22 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:50:13 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	setup_child_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
 
 void	child_cmd(t_cmd *cmds, t_shell *shell)
 {
@@ -37,6 +43,7 @@ void	child_cmd(t_cmd *cmds, t_shell *shell)
 
 void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 {
+	setup_child_signals();
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);

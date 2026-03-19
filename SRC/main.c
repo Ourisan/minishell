@@ -6,11 +6,26 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 15:54:25 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:36:49 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	setup_shell_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -26,12 +41,13 @@ int	main(int argc, char **argv, char **envp)
 	cmds = NULL;
 	shell.env = env_init(envp);
 	shell.last_status = 0;
+	setup_shell_signals();
 	while (1)
 	{
 		rl = readline(shell_prompt(env_find(shell.env, "PWD")->value));
 		if (rl && *rl)
 			add_history(rl);
-		else if (rl == NULL)
+		else if (!rl)
 		{
 			ft_printf("exit\n");
 			rl_clear_history();
