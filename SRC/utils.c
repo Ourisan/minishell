@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:55:23 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 16:08:33 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/23 21:33:41 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,29 @@ void	expand_var(char **new_var, t_shell *shell, int i, int j)
 {
 	char	*l;
 	char	*r;
-	char	*tmp;
+	t_env	*tmp;
 
 	if ((*new_var)[i + 1] == '?')
 	{
 		l = ft_strndup((*new_var), i);
 		r = ft_strdup(&(*new_var)[i + 2]);
 		(*new_var) = ft_strjoin(l, ft_strjoin(ft_itoa(shell->last_status), r));
-		free(l);
-		free(r);
 	}
 	else
 	{
-		while ((*new_var)[j] && (*new_var)[j] != '/' && (*new_var)[j] != ' ')
+		while ((*new_var)[j] && (*new_var)[j] != '/' && (*new_var)[j] != ' '
+			&& (*new_var)[j] != '$')
 			j++;
 		l = ft_strndup((*new_var), i);
 		r = ft_strdup(&(*new_var)[j]);
-		tmp = ft_strndup(&(*new_var)[i + 1], j - i - 1);
-		tmp = env_find(shell->env, tmp)->value;
-		(*new_var) = ft_strjoin(l, ft_strjoin(tmp, r));
-		free(l);
-		free(r);
+		tmp = env_find(shell->env, ft_strndup(&(*new_var)[i + 1], j - i - 1));
+		if (tmp)
+			(*new_var) = ft_strjoin(l, ft_strjoin(tmp->value, r));
+		else
+			(*new_var) = ft_strdup("");
 	}
+	free(l);
+	free(r);
 }
 
 char	*var_expansion(char *var, t_shell *shell)
@@ -57,9 +58,10 @@ char	*var_expansion(char *var, t_shell *shell)
 			home = env_find(shell->env, "HOME")->value;
 			new_var = ft_strjoin(home, &new_var[1]);
 		}
-		if (new_var[i] == '$' && new_var[i + 1] && new_var[i + 1] != ' ')
+		if (new_var[i] == '$' && new_var[i + 1]
+			&& new_var[i + 1] != ' ')
 		{
-			expand_var(&new_var, shell, i, i);
+			expand_var(&new_var, shell, i, i + 1);
 		}
 		i++;
 	}

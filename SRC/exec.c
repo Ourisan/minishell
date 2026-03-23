@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/22 05:16:38 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/23 23:44:04 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,18 @@ void	child_cmd(t_cmd *cmds, t_shell *shell)
 {
 	char	*path;
 
-	if (is_builtin_cmd(cmds->argv[0]))
-	{
-		builtin_cmd(cmds->argv[0], cmds->argv, shell);
-		exit(1);
-	}
 	path = exec_path(cmds->argv[0], shell->env);
-	if (path)
-	{
-		execve(path, cmds->argv, env_to_array(shell->env));
-		perror("execve");
-		exit(1);
-	}
-	else
+	if (!path)
 	{
 		ft_printf_fd(2, "%s: command not found\n", cmds->argv[0]);
-		exit(1);
+		exit (127);
 	}
+	execve(path, cmds->argv, env_to_array(shell->env));
+	if (errno == ENOENT)
+		exit(127);
+	if (errno == EACCES || errno == EISDIR)
+		exit(126);
+	exit(1);
 }
 
 void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
@@ -55,8 +50,16 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	redir_open(cmds->redir);
+	if (redir_open(cmds->redir))
+		exit(1);
 	redir_exec(cmds->redir);
+	if (!cmds->argv || !cmds->argv[0])
+		exit(0);
+	if (is_builtin_cmd(cmds->argv[0]))
+	{
+		builtin_cmd(cmds->argv[0], cmds->argv, shell);
+		exit(0);
+	}
 	child_cmd(cmds, shell);
 }
 
@@ -83,26 +86,31 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 	}
 }
 
-void	exec(t_cmd *cmds, t_shell *shell)
+int	exec(t_cmd *cmds, t_shell *shell)
 {
 	int		status;
 	int		prev_fd;
 	pid_t	pid_son;
 
 	prev_fd = -1;
-	if (!cmds || !cmds->argv || !cmds->argv[0])
-		return ;
-	if (is_builtin_cmd(cmds->argv[0]) && !cmds->next && !cmds->redir)
-	{
-		shell->last_status = builtin_cmd(cmds->argv[0], cmds->argv, shell);
-		return ;
-	}
+	if (cmds->argv && is_builtin_cmd(cmds->argv[0])
+		&& !cmds->next && !cmds->redir)
+		return (builtin_cmd(cmds->argv[0], cmds->argv, shell));
 	while (cmds)
 	{
 		redir_open_heredoc(cmds->redir);
+		if (redir_open(cmds->redir))
+			return (1);
+		if ((!cmds->argv || !cmds->argv[0]) && !cmds->next)
+			return (0);
+		if (!cmds->argv || !cmds->argv[0])
+		{
+			cmds = cmds->next;
+			continue ;
+		}
 		pipe_exec(cmds, &pid_son, shell, &prev_fd);
 		cmds = cmds->next;
 	}
 	waitpid(pid_son, &status, 0);
-	shell->last_status = WEXITSTATUS(status);
+	return (WEXITSTATUS(status));
 }

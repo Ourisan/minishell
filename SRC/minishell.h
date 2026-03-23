@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/22 05:16:36 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/23 23:30:12 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@
 # include <readline/history.h>
 # include "../LIBFT/SRC/libft.h"
 # include <linux/limits.h>
+# include <errno.h>
 
 /* Exec */
-void	exec(t_cmd *cmds, t_shell *shell);
+int		exec(t_cmd *cmds, t_shell *shell);
 
 /* Exec Utils*/
 int		builtin_cmd(char *cmd, char **argv, t_shell *shell);
 int		is_builtin_cmd(char *cmd);
 
 /* Redir */
-void	redir_open(t_redir *r);
+int		redir_open(t_redir *r);
 void	redir_open_heredoc(t_redir *r);
 void	redir_exec(t_redir *r);
 
@@ -45,7 +46,7 @@ char	*shell_prompt(char *pwd);
 t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **lst, t_token *new);
 void	token_clear(t_token **lst);
-int 	handle_word(t_token **token, char *str, t_shell *shell);
+int		handle_word(t_token **token, char *str, t_shell *shell);
 int		lexer(t_token **token, char *str, t_shell *shell);
 
 /* Parser */
@@ -54,7 +55,7 @@ void	argv_add(char ***argv, char *value);
 void	redir_add(t_redir **list, t_token_type type, char *target);
 void	cmd_add_back(t_cmd **list, t_cmd *new);
 int		check_cmd(t_token *tokens);
-void	parser_init(t_cmd **cmds, t_token *tokens);
+void	parser_init(t_cmd **cmds, t_token *tokens, t_shell *shell);
 void	cmds_clear(t_cmd **cmds);
 
 /* Env */

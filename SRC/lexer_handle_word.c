@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_handle_word.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/23 23:41:40 by lde-plac          #+#    #+#             */
+/*   Updated: 2026/03/23 23:42:13 by lde-plac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -24,13 +35,13 @@ int	handle_quote(char *str)
 	while (str[i] && str[i] != quote)
 		i++;
 	if (str[i] != quote)
-		return (ft_printf_fd(2, "syntax error: quote not closed\n"), 0);
+		return (ft_printf_fd(2, "syntax error: quote not closed\n"), -1);
 	return (i + 1);
 }
 
 int	handle_word_loop(char **wrd, char *str, t_shell *shell)
 {
-	int		j;
+	int	j;
 
 	if (*str == '\'' || *str == '"')
 	{
@@ -50,13 +61,19 @@ int	handle_word_loop(char **wrd, char *str, t_shell *shell)
 int	handle_word(t_token **token, char *str, t_shell *shell)
 {
 	int		i;
+	int		j;
 	char	*wrd;
 
 	i = 0;
-	wrd = "";
+	wrd = ft_strdup("");
 	while (str[i] && str[i] != '<' && str[i] != '>'
 		&& str[i] != '|' && str[i] != ' ' && str[i] != '\t')
-		i += handle_word_loop(&wrd, &str[i], shell);
+	{
+		j = handle_word_loop(&wrd, &str[i], shell);
+		if (j < 0)
+			return (-1);
+		i += j;
+	}
 	if (!wrd)
 		return (0);
 	token_add_back(token, token_new(wrd, TOKEN_WORD));

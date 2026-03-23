@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:27 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 01:38:30 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/23 23:30:44 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,15 @@ void	parser(t_token *tokens, t_cmd *current, t_cmd **cmds)
 	cmd_add_back(cmds, current);
 }
 
-void	parser_init(t_cmd **cmds, t_token *tokens)
+void	parser_init(t_cmd **cmds, t_token *tokens, t_shell *shell)
 {
 	t_cmd	*current;
 
 	if (check_cmd(tokens))
+	{
+		shell->last_status = 2;
 		return ;
+	}
 	current = cmd_new();
 	if (!current)
 		return ;

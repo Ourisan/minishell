@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 01:06:58 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/22 05:16:16 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/23 23:05:53 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	redir_heredoc(t_redir *redir)
 	return (pipefd[0]);
 }
 
-void	redir_open(t_redir *r)
+int	redir_open(t_redir *r)
 {
 	while (r)
 	{
@@ -50,10 +50,11 @@ void	redir_open(t_redir *r)
 		if (r->fd < 0)
 		{
 			perror(r->target);
-			exit(EXIT_FAILURE);
+			return (1);
 		}
 		r = r->next;
 	}
+	return (0);
 }
 
 void	redir_open_heredoc(t_redir *r)

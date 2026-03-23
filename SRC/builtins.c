@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:39:35 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 16:28:23 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/23 20:16:45 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,21 @@ int	builtin_pwd(void)
 
 int	builtin_exit(char **args, t_shell *shell)
 {
-	int		i;
+	int		code;
 
-	printf("exit\n");
+	ft_printf("exit\n");
 	if (!args[1])
 		exit(shell->last_status);
-	i = 0;
-	while (args[1][i])
+	code = (int)(ft_atol(args[1]) % 256);
+	if (!code)
 	{
-		if (args[1][i] < '0' || args[1][i] > '9')
-		{
-			ft_printf_fd(2, "exit: %s: numeric argument required\n", args[1]);
-			exit(255);
-		}
-		i++;
+		ft_printf_fd(2, "exit: %s: numeric argument required\n", args[1]);
+		exit(2);
 	}
 	if (args[2])
 	{
 		ft_printf_fd(2, "exit: too many arguments\n");
 		return (1);
 	}
-	exit((int)(ft_atol(args[1]) % 256));
+	exit(code);
 }

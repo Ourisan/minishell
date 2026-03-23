@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:40 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 16:19:03 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/23 23:41:25 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_pipe(t_token *tokens)
 		return (1);
 	if (tokens->type == TOKEN_PIPE)
 	{
-		ft_printf_fd(2, "syntax error: unexpected pipe");
+		ft_printf_fd(2, "syntax error: unexpected pipe\n");
 		return (1);
 	}
 	tmp = tokens;
@@ -28,14 +28,14 @@ int	check_pipe(t_token *tokens)
 	{
 		if (tmp->type == TOKEN_PIPE && tmp->next->type == TOKEN_PIPE)
 		{
-			ft_printf_fd(2, "syntax error: consecutive pipes");
+			ft_printf_fd(2, "syntax error: consecutive pipes\n");
 			return (1);
 		}
 		tmp = tmp->next;
 	}
 	if (tmp && tmp->type == TOKEN_PIPE)
 	{
-		ft_printf_fd(2, "syntax error: unexpected pipe at end");
+		ft_printf_fd(2, "syntax error: unexpected pipe at end\n");
 		return (1);
 	}
 	return (0);
@@ -54,6 +54,7 @@ int	check_redir(t_token *tokens)
 			if (!tmp->next || tmp->next->type != TOKEN_WORD)
 			{
 				ft_printf_fd(2, "syntax error: missing target for redirection");
+				ft_printf_fd(2, "\n");
 				return (1);
 			}
 		}
@@ -73,7 +74,7 @@ int	check_heredoc(t_token *tokens)
 		{
 			if (!tmp->next || tmp->next->type != TOKEN_WORD)
 			{
-				ft_printf_fd(2, "syntax error: heredoc missing delimiter");
+				ft_printf_fd(2, "syntax error: heredoc missing delimiter\n");
 				return (1);
 			}
 		}
