@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
+#    By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/19 15:52:46 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/03/22 05:14:55 by ourisan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS		=	SRC/main.c \
 				SRC/exec_utils.c \
 				SRC/redir.c \
 				SRC/lexer.c \
+				SRC/lexer_handle_word.c \
 				SRC/token.c \
 				SRC/parsing.c \
 				SRC/parsing_list.c \

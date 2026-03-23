@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 17:36:48 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/22 05:16:36 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int		is_builtin_cmd(char *cmd);
 
 /* Redir */
 void	redir_open(t_redir *r);
+void	redir_open_heredoc(t_redir *r);
 void	redir_exec(t_redir *r);
 
 /* Utils*/
@@ -44,6 +45,7 @@ char	*shell_prompt(char *pwd);
 t_token	*token_new(char *value, t_token_type type);
 void	token_add_back(t_token **lst, t_token *new);
 void	token_clear(t_token **lst);
+int 	handle_word(t_token **token, char *str, t_shell *shell);
 int		lexer(t_token **token, char *str, t_shell *shell);
 
 /* Parser */

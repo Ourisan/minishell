@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/19 17:50:13 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/22 05:16:38 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,15 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
+	redir_open(cmds->redir);
 	redir_exec(cmds->redir);
 	child_cmd(cmds, shell);
 }
 
-void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell)
+void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 {
-	int		prev_fd;
 	int		pipefd[2];
 
-	prev_fd = -1;
 	if (cmds->next)
 	{
 		if (pipe(pipefd) == -1)
@@ -74,21 +73,23 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell)
 	if ((*pid_son) < 0)
 		return (perror("fork"));
 	if ((*pid_son) == 0)
-		child_process(cmds, shell, pipefd, prev_fd);
-	if (prev_fd != -1)
-		close(prev_fd);
+		child_process(cmds, shell, pipefd, *prev_fd);
+	if (*prev_fd != -1)
+		close(*prev_fd);
 	if (cmds->next)
 	{
 		close(pipefd[1]);
-		prev_fd = pipefd[0];
+		*prev_fd = pipefd[0];
 	}
 }
 
 void	exec(t_cmd *cmds, t_shell *shell)
 {
 	int		status;
+	int		prev_fd;
 	pid_t	pid_son;
 
+	prev_fd = -1;
 	if (!cmds || !cmds->argv || !cmds->argv[0])
 		return ;
 	if (is_builtin_cmd(cmds->argv[0]) && !cmds->next && !cmds->redir)
@@ -98,8 +99,8 @@ void	exec(t_cmd *cmds, t_shell *shell)
 	}
 	while (cmds)
 	{
-		redir_open(cmds->redir);
-		pipe_exec(cmds, &pid_son, shell);
+		redir_open_heredoc(cmds->redir);
+		pipe_exec(cmds, &pid_son, shell, &prev_fd);
 		cmds = cmds->next;
 	}
 	waitpid(pid_son, &status, 0);
