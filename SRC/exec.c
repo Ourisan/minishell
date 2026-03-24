@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/23 23:44:04 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/24 16:24:12 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	exec(t_cmd *cmds, t_shell *shell)
 	while (cmds)
 	{
 		redir_open_heredoc(cmds->redir);
-		if (redir_open(cmds->redir))
+		if ((!cmds->argv || !cmds->argv[0]) && redir_open(cmds->redir))
 			return (1);
 		if ((!cmds->argv || !cmds->argv[0]) && !cmds->next)
 			return (0);
