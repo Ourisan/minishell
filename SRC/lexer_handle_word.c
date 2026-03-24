@@ -3,30 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handle_word.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 23:41:40 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 23:42:13 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/24 19:36:18 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_no_quote(char *str)
+int	handle_no_quote(char **arg, char *str, t_shell *shell)
 {
 	int		i;
+	char	*wrd;
 
 	i = 0;
 	while (str[i] && str[i] != '<' && str[i] != '>'
 		&& str[i] != '"' && str[i] != '\'' && str[i] != '|'
 		&& str[i] != ' ' && str[i] != '\t')
 		i++;
+	wrd = ft_substr(str, 0, i);
+	if (!wrd)
+		return (-1);
+	wrd = var_expansion(wrd, shell);
+	*arg = ft_strjoin(*arg, wrd);
 	return (i);
 }
 
-int	handle_quote(char *str)
+int	handle_quote(char **arg, char *str, t_shell *shell)
 {
 	int		i;
+	char	*wrd;
 	char	quote;
 
 	i = 0;
@@ -36,6 +43,12 @@ int	handle_quote(char *str)
 		i++;
 	if (str[i] != quote)
 		return (ft_printf_fd(2, "syntax error: quote not closed\n"), -1);
+	wrd = ft_substr(str, 1, i - 1);
+	if (!wrd)
+		return (-1);
+	if (quote != '\'')
+		wrd = var_expansion(wrd, shell);
+	*arg = ft_strjoin(*arg, wrd);
 	return (i + 1);
 }
 
@@ -44,17 +57,9 @@ int	handle_word_loop(char **wrd, char *str, t_shell *shell)
 	int	j;
 
 	if (*str == '\'' || *str == '"')
-	{
-		j = handle_quote(str);
-		*wrd = ft_strjoin(*wrd, ft_substr(str, 1, j - 2));
-		if (*str != '\'')
-			*wrd = var_expansion(*wrd, shell);
-	}
+		j = handle_quote(wrd, str, shell);
 	else
-	{
-		j = handle_no_quote(str);
-		*wrd = var_expansion(ft_strjoin(*wrd, ft_substr(str, 0, j)), shell);
-	}
+		j = handle_no_quote(wrd, str, shell);
 	return (j);
 }
 
