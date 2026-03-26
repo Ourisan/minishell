@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:01:44 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/17 17:38:01 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 17:59:06 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_shell
 {
 	t_env	*env;
 	int		last_status;
+	char	*prompt;
 }	t_shell;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:27 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 23:30:44 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 17:49:38 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_redir(t_redir *redir)
 	}
 }
 
-void	cmds_clear(t_cmd **cmds)
+void	cmds_clear(t_cmd **cmds, char *prompt)
 {
 	t_cmd	*tmp;
 
@@ -54,6 +54,7 @@ void	cmds_clear(t_cmd **cmds)
 		free(*cmds);
 		*cmds = tmp;
 	}
+	free(prompt);
 }
 
 void	parser(t_token *tokens, t_cmd *current, t_cmd **cmds)

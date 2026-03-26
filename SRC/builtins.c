@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:39:35 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 20:16:45 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:04:42 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,31 @@ int	builtin_pwd(void)
 	return (0);
 }
 
-int	builtin_exit(char **args, t_shell *shell)
+int	builtin_exit(t_cmd	*cmds, t_shell *shell)
 {
 	int		code;
 
 	ft_printf("exit\n");
-	if (!args[1])
-		exit(shell->last_status);
-	code = (int)(ft_atol(args[1]) % 256);
-	if (!code)
+	if (!cmds->argv[1])
 	{
-		ft_printf_fd(2, "exit: %s: numeric argument required\n", args[1]);
+		free_env(shell->env);
+		cmds_clear(&cmds, shell->prompt);
+		exit(shell->last_status);
+	}
+	code = (int)(ft_atol(cmds->argv[1]) % 256);
+	if (!code && cmds->argv[1][0] != 48)
+	{
+		ft_printf_fd(2, "exit: %s: numeric argument required\n", cmds->argv[1]);
+		free_env(shell->env);
+		cmds_clear(&cmds, shell->prompt);
 		exit(2);
 	}
-	if (args[2])
+	if (cmds->argv[2])
 	{
 		ft_printf_fd(2, "exit: too many arguments\n");
 		return (1);
 	}
+	free_env(shell->env);
+	cmds_clear(&cmds, shell->prompt);
 	exit(code);
 }

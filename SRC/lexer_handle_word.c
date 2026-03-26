@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handle_word.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 23:41:40 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/24 19:36:18 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/26 18:30:20 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	handle_no_quote(char **arg, char *str, t_shell *shell)
 {
 	int		i;
 	char	*wrd;
+	char	*tmp;
 
 	i = 0;
 	while (str[i] && str[i] != '<' && str[i] != '>'
@@ -26,7 +27,10 @@ int	handle_no_quote(char **arg, char *str, t_shell *shell)
 	if (!wrd)
 		return (-1);
 	wrd = var_expansion(wrd, shell);
+	tmp = *arg;
 	*arg = ft_strjoin(*arg, wrd);
+	free(tmp);
+	free(wrd);
 	return (i);
 }
 
@@ -76,11 +80,11 @@ int	handle_word(t_token **token, char *str, t_shell *shell)
 	{
 		j = handle_word_loop(&wrd, &str[i], shell);
 		if (j < 0)
-			return (-1);
+			return (free(wrd), -1);
 		i += j;
 	}
 	if (!wrd)
 		return (0);
 	token_add_back(token, token_new(wrd, TOKEN_WORD));
-	return (i);
+	return (free(wrd), i);
 }

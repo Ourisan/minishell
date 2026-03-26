@@ -6,30 +6,30 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 15:50:36 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/19 15:50:57 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:44:57 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_cmd(char *cmd, char **argv, t_shell *shell)
+int	builtin_cmd(t_cmd *cmds, t_shell *shell)
 {
-	if (!cmd)
+	if (!cmds->argv[0])
 		return (1);
-	if (!ft_strcmp(cmd, "echo"))
-		return (builtin_echo(argv));
-	if (!ft_strcmp(cmd, "cd"))
-		return (builtin_cd(argv, shell->env));
-	if (!ft_strcmp(cmd, "pwd"))
+	if (!ft_strcmp(cmds->argv[0], "echo"))
+		return (builtin_echo(cmds->argv));
+	if (!ft_strcmp(cmds->argv[0], "cd"))
+		return (builtin_cd(cmds->argv, shell->env));
+	if (!ft_strcmp(cmds->argv[0], "pwd"))
 		return (builtin_pwd());
-	if (!ft_strcmp(cmd, "export"))
-		return (builtin_export(argv, shell->env));
-	if (!ft_strcmp(cmd, "unset"))
-		return (builtin_unset(argv, &shell->env));
-	if (!ft_strcmp(cmd, "env"))
+	if (!ft_strcmp(cmds->argv[0], "export"))
+		return (builtin_export(cmds->argv, shell->env));
+	if (!ft_strcmp(cmds->argv[0], "unset"))
+		return (builtin_unset(cmds->argv, &shell->env));
+	if (!ft_strcmp(cmds->argv[0], "env"))
 		return (builtin_env(shell->env));
-	if (!ft_strcmp(cmd, "exit"))
-		return (builtin_exit(argv, shell));
+	if (!ft_strcmp(cmds->argv[0], "exit"))
+		return (builtin_exit(cmds, shell));
 	return (0);
 }
 
@@ -41,4 +41,11 @@ int	is_builtin_cmd(char *cmd)
 		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
 		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
 		|| !ft_strcmp(cmd, "exit"));
+}
+
+void	exit_child_process(t_cmd *cmds, t_shell *shell, int code)
+{
+	cmds_clear(&cmds, shell->prompt);
+	free_env(shell->env);
+	exit(code);
 }

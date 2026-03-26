@@ -6,16 +6,40 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 16:29:34 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 03:48:34 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:05:01 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_add_back(t_env **env, t_env *new)
+void	free_env(t_env	*env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		free(env->key);
+		free(env->value);
+		env = env->next;
+		free(tmp);
+	}
+}
+
+void	env_add_back(t_env **env, char *key, char *value)
 {
 	t_env	*last;
+	t_env	*new;
 
+	new = malloc(sizeof(t_env));
+	if (!env)
+		return ;
+	new->key = ft_strdup(key);
+	if (value)
+		new->value = ft_strdup(value);
+	else
+		new->value = NULL;
+	new->next = NULL;
 	if (!*env)
 	{
 		*env = new;
@@ -25,22 +49,6 @@ void	env_add_back(t_env **env, t_env *new)
 	while (last->next)
 		last = last->next;
 	last->next = new;
-}
-
-t_env	*env_new(char *key, char *value)
-{
-	t_env	*env;
-
-	env = malloc(sizeof(t_env));
-	if (!env)
-		return (0);
-	env->key = ft_strdup(key);
-	if (value)
-		env->value = ft_strdup(value);
-	else
-		env->value = NULL;
-	env->next = NULL;
-	return (env);
 }
 
 t_env	*env_find(t_env *env, char *key)
@@ -70,7 +78,7 @@ void	env_set(t_env **env, char *key, char *value, int append)
 		e->value = ft_strdup(new_value);
 	}
 	else
-		env_add_back(env, env_new(key, value));
+		env_add_back(env, key, value);
 }
 
 t_env	*env_init(char **envp)
@@ -86,7 +94,7 @@ t_env	*env_init(char **envp)
 	{
 		key = ft_strndup(envp[i], strchr(envp[i], '=') - envp[i]);
 		value = ft_strdup(strchr(envp[i], '=') + 1);
-		env_add_back(&env, env_new(key, value));
+		env_add_back(&env, key, value);
 		free(key);
 		free(value);
 		i++;

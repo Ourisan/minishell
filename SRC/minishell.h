@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 23:30:12 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:45:06 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@
 int		exec(t_cmd *cmds, t_shell *shell);
 
 /* Exec Utils*/
-int		builtin_cmd(char *cmd, char **argv, t_shell *shell);
+int		builtin_cmd(t_cmd *cmd, t_shell *shell);
 int		is_builtin_cmd(char *cmd);
+void	exit_child_process(t_cmd *cmds, t_shell *shell, int code);
 
 /* Redir */
 int		redir_open(t_redir *r);
@@ -56,9 +57,10 @@ void	redir_add(t_redir **list, t_token_type type, char *target);
 void	cmd_add_back(t_cmd **list, t_cmd *new);
 int		check_cmd(t_token *tokens);
 void	parser_init(t_cmd **cmds, t_token *tokens, t_shell *shell);
-void	cmds_clear(t_cmd **cmds);
+void	cmds_clear(t_cmd **cmds, char *prompt);
 
 /* Env */
+void	free_env(t_env	*env);
 t_env	*env_find(t_env *env, char *key);
 void	env_set(t_env **env, char *key, char *value, int append);
 t_env	*env_init(char **envp);
@@ -70,7 +72,7 @@ int		builtin_pwd(void);
 int		builtin_export(char **args, t_env *env);
 int		builtin_unset(char	**args, t_env **env);
 int		builtin_env(t_env *env);
-int		builtin_exit(char **args, t_shell *shell);
+int		builtin_exit(t_cmd *cmds, t_shell *shell);
 
 /* Built-ins utils */
 void	export_env(char *arg, t_env *env, int *status);

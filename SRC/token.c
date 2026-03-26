@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:01:13 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/05 01:38:24 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 17:02:42 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_token	*token_new(char *value, t_token_type type)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->value = value;
+	token->value = ft_strdup(value);
 	token->type = type;
 	token->next = NULL;
 	return (token);

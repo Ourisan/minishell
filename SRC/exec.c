@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/24 16:24:12 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:44:28 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void	child_cmd(t_cmd *cmds, t_shell *shell)
 	if (!path)
 	{
 		ft_printf_fd(2, "%s: command not found\n", cmds->argv[0]);
-		exit (127);
+		exit_child_process(cmds, shell, 127);
 	}
 	execve(path, cmds->argv, env_to_array(shell->env));
 	if (errno == ENOENT)
-		exit(127);
+		exit_child_process(cmds, shell, 127);
 	if (errno == EACCES || errno == EISDIR)
-		exit(126);
-	exit(1);
+		exit_child_process(cmds, shell, 126);
+	exit_child_process(cmds, shell, 1);
 }
 
 void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
@@ -51,14 +51,14 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 		close(pipefd[1]);
 	}
 	if (redir_open(cmds->redir))
-		exit(1);
+		exit_child_process(cmds, shell, 1);
 	redir_exec(cmds->redir);
 	if (!cmds->argv || !cmds->argv[0])
-		exit(0);
+		exit_child_process(cmds, shell, 0);
 	if (is_builtin_cmd(cmds->argv[0]))
 	{
-		builtin_cmd(cmds->argv[0], cmds->argv, shell);
-		exit(0);
+		builtin_cmd(cmds, shell);
+		exit_child_process(cmds, shell, 0);
 	}
 	child_cmd(cmds, shell);
 }
@@ -95,7 +95,7 @@ int	exec(t_cmd *cmds, t_shell *shell)
 	prev_fd = -1;
 	if (cmds->argv && is_builtin_cmd(cmds->argv[0])
 		&& !cmds->next && !cmds->redir)
-		return (builtin_cmd(cmds->argv[0], cmds->argv, shell));
+		return (builtin_cmd(cmds, shell));
 	while (cmds)
 	{
 		redir_open_heredoc(cmds->redir);

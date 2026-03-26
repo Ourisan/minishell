@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+         #
+#    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/22 05:14:55 by ourisan          ###   ########.fr        #
+#    Updated: 2026/03/26 19:00:41 by lde-plac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g3
+CFLAGS		=	-Wall -Wextra -Werror
 
 SRCS		=	SRC/main.c \
 				SRC/utils.c \

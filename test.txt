@@ -2,12 +2,9 @@ TO TEST:
 
 ALL:
     Make sure all error messages are correct (command not found, ...)
-    Check for leaks
-    Double check if var expansion works (check if we need *)
-    Problems with echo "42"'$'"42"
+    Handle op and handle pipe leaks
+    Add all close
 
 SIGNALS:
     handle Ctrl+C in child process
 
-EXECVE:
-    test for file access after testing if file exists

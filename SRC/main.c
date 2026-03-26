@@ -6,7 +6,7 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 23:56:50 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:59:57 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*cmds;
 	t_shell	shell;
 
-	(void)argc;
+	if (argc != 1)
+	{
+		ft_printf_fd(2, "Too many arguments");
+		return (1);
+	}
 	(void)argv;
 	rl = "";
 	token = NULL;
@@ -44,13 +48,16 @@ int	main(int argc, char **argv, char **envp)
 	setup_shell_signals();
 	while (1)
 	{
-		rl = readline(shell_prompt(env_find(shell.env, "PWD")->value));
+		shell.prompt = shell_prompt(env_find(shell.env, "PWD")->value);
+		rl = readline(shell.prompt);
 		if (rl && *rl)
 			add_history(rl);
 		else if (!rl)
 		{
 			ft_printf("exit\n");
 			rl_clear_history();
+			free_env(shell.env);
+			free(shell.prompt);
 			exit(0);
 		}
 		if (ft_strcmp(rl, ""))
@@ -61,8 +68,9 @@ int	main(int argc, char **argv, char **envp)
 			token_clear(&token);
 			if (cmds)
 				shell.last_status = exec(cmds, &shell);
-			cmds_clear(&cmds);
+			cmds_clear(&cmds, shell.prompt);
 		}
+		free(rl);
 	}
 	return (0);
 }
