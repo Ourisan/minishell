@@ -6,7 +6,7 @@
 /*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:01:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/22 05:14:12 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/03/26 19:23:57 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	handle_op(char *str, t_token **token)
 	if (!wrd)
 		return (0);
 	token_add_back(token, token_new(wrd, type));
+	free(wrd);
 	return (i - 1);
 }
 
@@ -48,6 +49,7 @@ int	handle_pipe(t_token **token)
 	if (!wrd)
 		return (0);
 	token_add_back(token, token_new(wrd, TOKEN_PIPE));
+	free(wrd);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:34 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/04 16:51:35 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/02 23:30:22 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	redir_add(t_redir **list, t_token_type type, char *target)
 	new->type = type;
 	new->target = ft_strdup(target);
 	new->next = NULL;
+	new->fd = -1;
 	if (!*list)
 	{
 		*list = new;

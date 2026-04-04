@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/26 18:59:57 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/02 23:49:18 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int	main(int argc, char **argv, char **envp)
 				shell.last_status = exec(cmds, &shell);
 			cmds_clear(&cmds, shell.prompt);
 		}
+		else
+			free(shell.prompt);
 		free(rl);
 	}
 	return (0);

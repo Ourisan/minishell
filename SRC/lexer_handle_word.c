@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handle_word.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 23:41:40 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/26 18:30:20 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 09:02:12 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	handle_quote(char **arg, char *str, t_shell *shell)
 {
 	int		i;
 	char	*wrd;
+	char	*tmp;
 	char	quote;
 
 	i = 0;
@@ -52,7 +53,10 @@ int	handle_quote(char **arg, char *str, t_shell *shell)
 		return (-1);
 	if (quote != '\'')
 		wrd = var_expansion(wrd, shell);
+	tmp = *arg;
 	*arg = ft_strjoin(*arg, wrd);
+	free(tmp);
+	free(wrd);
 	return (i + 1);
 }
 
@@ -75,6 +79,8 @@ int	handle_word(t_token **token, char *str, t_shell *shell)
 
 	i = 0;
 	wrd = ft_strdup("");
+	if (!wrd)
+		return (-1);
 	while (str[i] && str[i] != '<' && str[i] != '>'
 		&& str[i] != '|' && str[i] != ' ' && str[i] != '\t')
 	{

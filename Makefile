@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+         #
+#    By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/23 17:29:24 by lde-plac          #+#    #+#              #
-#    Updated: 2026/03/26 19:00:41 by lde-plac         ###   ########.fr        #
+#    Updated: 2026/04/04 07:48:49 by ourisan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ CFLAGS		=	-Wall -Wextra -Werror
 
 SRCS		=	SRC/main.c \
 				SRC/utils.c \
+				SRC/utils_2.c \
 				SRC/exec.c \
 				SRC/exec_utils.c \
 				SRC/redir.c \

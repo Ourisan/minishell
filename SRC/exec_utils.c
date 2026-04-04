@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 15:50:36 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/26 18:44:57 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 07:49:03 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,12 @@ void	exit_child_process(t_cmd *cmds, t_shell *shell, int code)
 	cmds_clear(&cmds, shell->prompt);
 	free_env(shell->env);
 	exit(code);
+}
+
+void	close_pipe(int *pipefd)
+{
+	if (pipefd[0] != -1)
+		close(pipefd[0]);
+	if (pipefd[1] != -1)
+		close(pipefd[1]);
 }

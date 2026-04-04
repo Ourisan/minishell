@@ -7,4 +7,5 @@ ALL:
 
 SIGNALS:
     handle Ctrl+C in child process
+	Ctrl+C in heredoc
 

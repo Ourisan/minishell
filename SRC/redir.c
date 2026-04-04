@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 01:06:58 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/23 23:05:53 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 04:55:13 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	redir_open_heredoc(t_redir *r)
 	{
 		if (r->type == TOKEN_HEREDOC)
 			r->fd = redir_heredoc(r);
+		else
+			return ;
 		if (r->fd < 0)
 		{
 			perror(r->target);
@@ -81,6 +83,16 @@ void	redir_exec(t_redir *r)
 		else if (r->type == TOKEN_APPEND || r->type == TOKEN_REDIR_OUT)
 			dup2(r->fd, STDOUT_FILENO);
 		close(r->fd);
+		r = r->next;
+	}
+}
+
+void	close_all_redirs(t_redir *r)
+{
+	while (r)
+	{
+		if (r->fd > 2)
+			close(r->fd);
 		r = r->next;
 	}
 }

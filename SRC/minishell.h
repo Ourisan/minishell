@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/26 18:45:06 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 07:48:52 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,19 @@ int		exec(t_cmd *cmds, t_shell *shell);
 int		builtin_cmd(t_cmd *cmd, t_shell *shell);
 int		is_builtin_cmd(char *cmd);
 void	exit_child_process(t_cmd *cmds, t_shell *shell, int code);
+void	close_pipe(int *pipefd);
 
 /* Redir */
 int		redir_open(t_redir *r);
 void	redir_open_heredoc(t_redir *r);
 void	redir_exec(t_redir *r);
+void	close_all_redirs(t_redir *r);
 
 /* Utils*/
 char	*var_expansion(char *var, t_shell *shell);
 char	**env_to_array(t_env *env);
+
+/* Utils_2*/
 char	*exec_path(char	*cmd, t_env *env);
 char	*shell_prompt(char *pwd);
 

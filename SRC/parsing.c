@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 16:51:27 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/26 17:49:38 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/02 23:48:07 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	cmds_clear(t_cmd **cmds, char *prompt)
 	t_cmd	*tmp;
 
 	if (!cmds || !*cmds)
+	{
+		free(prompt);
 		return ;
+	}
 	while (*cmds)
 	{
 		tmp = (*cmds)->next;

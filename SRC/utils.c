@@ -3,42 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 01:55:23 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/03/23 21:33:41 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 07:53:34 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	expand_var_2(char **new_var, t_shell *shell, int i, int j)
+{
+	char	*l;
+	char	*r;
+	char	*tmp_var;
+	char	*tmp_var_2;
+	t_env	*tmp;
+
+	l = ft_strndup((*new_var), i);
+	r = ft_strdup(&(*new_var)[j]);
+	tmp_var = ft_strndup(&(*new_var)[i + 1], j - i - 1);
+	tmp = env_find(shell->env, tmp_var);
+	free(tmp_var);
+	if (tmp)
+	{
+		tmp_var_2 = ft_strjoin(tmp->value, r);
+		tmp_var = ft_strjoin(l, tmp_var_2);
+		free(tmp_var_2);
+	}
+	else
+		tmp_var = ft_strdup("");
+	free(*new_var);
+	*new_var = tmp_var;
+	free(l);
+	free(r);
+}
+
 void	expand_var(char **new_var, t_shell *shell, int i, int j)
 {
 	char	*l;
 	char	*r;
-	t_env	*tmp;
+	char	*tmp_var;
+	char	*tmp_var_2;
 
 	if ((*new_var)[i + 1] == '?')
 	{
 		l = ft_strndup((*new_var), i);
 		r = ft_strdup(&(*new_var)[i + 2]);
-		(*new_var) = ft_strjoin(l, ft_strjoin(ft_itoa(shell->last_status), r));
+		tmp_var_2 = ft_strjoin(ft_itoa(shell->last_status), r);
+		tmp_var = ft_strjoin(l, tmp_var_2);
+		free(*new_var);
+		*new_var = tmp_var;
+		free(tmp_var_2);
+		free(l);
+		free(r);
 	}
 	else
 	{
 		while ((*new_var)[j] && (*new_var)[j] != '/' && (*new_var)[j] != ' '
 			&& (*new_var)[j] != '$')
 			j++;
-		l = ft_strndup((*new_var), i);
-		r = ft_strdup(&(*new_var)[j]);
-		tmp = env_find(shell->env, ft_strndup(&(*new_var)[i + 1], j - i - 1));
-		if (tmp)
-			(*new_var) = ft_strjoin(l, ft_strjoin(tmp->value, r));
-		else
-			(*new_var) = ft_strdup("");
+		expand_var_2(new_var, shell, i, j);
 	}
-	free(l);
-	free(r);
 }
 
 char	*var_expansion(char *var, t_shell *shell)
@@ -51,6 +77,7 @@ char	*var_expansion(char *var, t_shell *shell)
 	if (var[0] != '~' && !ft_strchr(var, '$'))
 		return (var);
 	new_var = ft_strdup(var);
+	free(var);
 	while (new_var[i])
 	{
 		if (i == 0 && new_var[i] == '~')
@@ -93,42 +120,4 @@ char	**env_to_array(t_env *env)
 	}
 	env_a[i] = NULL;
 	return (env_a);
-}
-
-char	*exec_path(char	*cmd, t_env *env)
-{
-	int		i;
-	char	**paths;
-	char	*path;
-
-	i = 0;
-	if (ft_strchr(cmd, '/'))
-		return (cmd);
-	paths = ft_split(env_find(env, "PATH")->value, ':');
-	while (paths[i])
-	{
-		path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd);
-		if (!access(path, X_OK))
-			return (path);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*shell_prompt(char *pwd)
-{
-	char	*prompt;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (pwd[i])
-	{
-		if (pwd[i] == '/')
-			j = i;
-		i++;
-	}
-	prompt = ft_strjoin(&pwd[j + 1], "$> ");
-	return (prompt);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/03/26 18:44:28 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/04 08:04:39 by ourisan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,8 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 		close(prev_fd);
 	}
 	if (cmds->next)
-	{
 		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[0]);
-		close(pipefd[1]);
-	}
+	close_pipe(pipefd);
 	if (redir_open(cmds->redir))
 		exit_child_process(cmds, shell, 1);
 	redir_exec(cmds->redir);
@@ -67,6 +64,9 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 {
 	int		pipefd[2];
 
+	pipefd[0] = -1;
+	pipefd[1] = -1;
+	redir_open_heredoc(cmds->redir);
 	if (cmds->next)
 	{
 		if (pipe(pipefd) == -1)
@@ -84,6 +84,8 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 		close(pipefd[1]);
 		*prev_fd = pipefd[0];
 	}
+	else
+		close_pipe(pipefd);
 }
 
 int	exec(t_cmd *cmds, t_shell *shell)
@@ -98,7 +100,6 @@ int	exec(t_cmd *cmds, t_shell *shell)
 		return (builtin_cmd(cmds, shell));
 	while (cmds)
 	{
-		redir_open_heredoc(cmds->redir);
 		if ((!cmds->argv || !cmds->argv[0]) && redir_open(cmds->redir))
 			return (1);
 		if ((!cmds->argv || !cmds->argv[0]) && !cmds->next)
@@ -109,6 +110,7 @@ int	exec(t_cmd *cmds, t_shell *shell)
 			continue ;
 		}
 		pipe_exec(cmds, &pid_son, shell, &prev_fd);
+		close_all_redirs(cmds->redir);
 		cmds = cmds->next;
 	}
 	waitpid(pid_son, &status, 0);
