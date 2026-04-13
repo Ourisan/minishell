@@ -6,6 +6,6 @@ ALL:
     Add all close
 
 SIGNALS:
-    handle Ctrl+C in child process
+    CTRL+\ in child process (^\Quit (core dumped))
 	Ctrl+C in heredoc
 

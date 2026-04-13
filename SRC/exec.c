@@ -6,17 +6,11 @@
 /*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/04/13 14:27:11 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/13 15:42:25 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	setup_child_signals(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
 
 void	child_cmd(t_cmd *cmds, t_shell *shell)
 {
@@ -38,7 +32,8 @@ void	child_cmd(t_cmd *cmds, t_shell *shell)
 
 void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 {
-	setup_child_signals();
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -88,6 +83,20 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 		close_pipe(pipefd);
 }
 
+int	exec_cmds(t_cmd *cmds)
+{
+	if ((!cmds->argv || !cmds->argv[0]) && redir_open(cmds->redir))
+		return (1);
+	if ((!cmds->argv || !cmds->argv[0]) && !cmds->next)
+		return (0);
+	if (!cmds->argv || !cmds->argv[0])
+	{
+		cmds = cmds->next;
+		return (-1);
+	}
+	return (2);
+}
+
 int	exec(t_cmd *cmds, t_shell *shell)
 {
 	int		status;
@@ -100,15 +109,10 @@ int	exec(t_cmd *cmds, t_shell *shell)
 		return (builtin_cmd(cmds, shell));
 	while (cmds)
 	{
-		if ((!cmds->argv || !cmds->argv[0]) && redir_open(cmds->redir))
-			return (1);
-		if ((!cmds->argv || !cmds->argv[0]) && !cmds->next)
-			return (0);
-		if (!cmds->argv || !cmds->argv[0])
-		{
-			cmds = cmds->next;
+		if (exec_cmds(cmds) == 0 || exec_cmds(cmds) == 1)
+			return (exec_cmds(cmds));
+		else if (exec_cmds(cmds) == -1)
 			continue ;
-		}
 		pipe_exec(cmds, &pid_son, shell, &prev_fd);
 		close_all_redirs(cmds->redir);
 		cmds = cmds->next;

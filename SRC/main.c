@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:17:04 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/04/02 23:49:18 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/04/13 15:29:03 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,35 @@ void	setup_shell_signals(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	main_loop(char*rl, t_token *token, t_cmd *cmds, t_shell *shell)
+{
+	shell->prompt = shell_prompt(env_find(shell->env, "PWD")->value);
+	rl = readline(shell->prompt);
+	if (rl && *rl)
+		add_history(rl);
+	else if (!rl)
+	{
+		ft_printf("exit\n");
+		rl_clear_history();
+		free_env(shell->env);
+		free(shell->prompt);
+		exit(0);
+	}
+	if (ft_strcmp(rl, ""))
+	{
+		if (!lexer(&token, rl, shell))
+			token_clear(&token);
+		parser_init(&cmds, token, shell);
+		token_clear(&token);
+		if (cmds)
+			shell->last_status = exec(cmds, shell);
+		cmds_clear(&cmds, shell->prompt);
+	}
+	else
+		free(shell->prompt);
+	free(rl);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -48,31 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	setup_shell_signals();
 	while (1)
 	{
-		shell.prompt = shell_prompt(env_find(shell.env, "PWD")->value);
-		rl = readline(shell.prompt);
-		if (rl && *rl)
-			add_history(rl);
-		else if (!rl)
-		{
-			ft_printf("exit\n");
-			rl_clear_history();
-			free_env(shell.env);
-			free(shell.prompt);
-			exit(0);
-		}
-		if (ft_strcmp(rl, ""))
-		{
-			if (!lexer(&token, rl, &shell))
-				token_clear(&token);
-			parser_init(&cmds, token, &shell);
-			token_clear(&token);
-			if (cmds)
-				shell.last_status = exec(cmds, &shell);
-			cmds_clear(&cmds, shell.prompt);
-		}
-		else
-			free(shell.prompt);
-		free(rl);
+		main_loop(rl, token, cmds, &shell);
 	}
 	return (0);
 }
