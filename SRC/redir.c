@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 01:06:58 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/04/04 04:55:13 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/04/13 12:37:50 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	redir_heredoc(t_redir *redir)
 
 	if (pipe(pipefd) == -1)
 		return (-1);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		rl = readline("heredoc> ");

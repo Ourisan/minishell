@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/04/04 07:48:52 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:26:55 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,20 @@
 # include <linux/limits.h>
 # include <errno.h>
 
+/* Main */
+void	setup_shell_signals(void);
+
 /* Exec */
 int		exec(t_cmd *cmds, t_shell *shell);
 
 /* Exec Utils*/
-int		builtin_cmd(t_cmd *cmd, t_shell *shell);
-int		is_builtin_cmd(char *cmd);
+char	*exec_path(char	*cmd, t_env *env);
 void	exit_child_process(t_cmd *cmds, t_shell *shell, int code);
 void	close_pipe(int *pipefd);
+
+/* Exec Builtins */
+int		builtin_cmd(t_cmd *cmd, t_shell *shell);
+int		is_builtin_cmd(char *cmd);
 
 /* Redir */
 int		redir_open(t_redir *r);
@@ -39,13 +45,10 @@ void	redir_open_heredoc(t_redir *r);
 void	redir_exec(t_redir *r);
 void	close_all_redirs(t_redir *r);
 
-/* Utils*/
+/* Utils */
+char	*shell_prompt(char *pwd);
 char	*var_expansion(char *var, t_shell *shell);
 char	**env_to_array(t_env *env);
-
-/* Utils_2*/
-char	*exec_path(char	*cmd, t_env *env);
-char	*shell_prompt(char *pwd);
 
 /* Lexer */
 t_token	*token_new(char *value, t_token_type type);

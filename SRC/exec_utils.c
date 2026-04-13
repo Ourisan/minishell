@@ -3,44 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 15:50:36 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/04/04 07:49:03 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/04/13 12:21:57 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_cmd(t_cmd *cmds, t_shell *shell)
+void	free_tab(char **tab)
 {
-	if (!cmds->argv[0])
-		return (1);
-	if (!ft_strcmp(cmds->argv[0], "echo"))
-		return (builtin_echo(cmds->argv));
-	if (!ft_strcmp(cmds->argv[0], "cd"))
-		return (builtin_cd(cmds->argv, shell->env));
-	if (!ft_strcmp(cmds->argv[0], "pwd"))
-		return (builtin_pwd());
-	if (!ft_strcmp(cmds->argv[0], "export"))
-		return (builtin_export(cmds->argv, shell->env));
-	if (!ft_strcmp(cmds->argv[0], "unset"))
-		return (builtin_unset(cmds->argv, &shell->env));
-	if (!ft_strcmp(cmds->argv[0], "env"))
-		return (builtin_env(shell->env));
-	if (!ft_strcmp(cmds->argv[0], "exit"))
-		return (builtin_exit(cmds, shell));
-	return (0);
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
 }
 
-int	is_builtin_cmd(char *cmd)
+char	*exec_path(char *cmd, t_env *env)
 {
-	if (!cmd)
-		return (1);
-	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
-		|| !ft_strcmp(cmd, "exit"));
+	int		i;
+	char	**paths;
+	char	*tmp;
+	char	*path;
+
+	i = -1;
+	if (ft_strchr(cmd, '/'))
+		return (cmd);
+	paths = ft_split(env_find(env, "PATH")->value, ':');
+	if (!paths)
+		return (NULL);
+	while (paths[++i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (!access(path, X_OK))
+		{
+			free_tab(paths);
+			return (path);
+		}
+		free(path);
+	}
+	free_tab(paths);
+	return (NULL);
 }
 
 void	exit_child_process(t_cmd *cmds, t_shell *shell, int code)

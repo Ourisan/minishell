@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ourisan <ourisan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/04/04 08:04:39 by ourisan          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:27:11 by lde-plac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,11 @@ int	exec(t_cmd *cmds, t_shell *shell)
 		close_all_redirs(cmds->redir);
 		cmds = cmds->next;
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid_son, &status, 0);
+	setup_shell_signals();
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		ft_printf("\n");
 	return (WEXITSTATUS(status));
 }
