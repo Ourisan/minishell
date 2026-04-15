@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajuvin <ajuvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 12:20:55 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/04/13 12:22:14 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:07:31 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	builtin_cmd(t_cmd *cmds, t_shell *shell)
 	return (0);
 }
 
-int	is_builtin_cmd(char *cmd)
+int	is_builtin(char *cmd)
 {
 	if (!cmd)
 		return (1);

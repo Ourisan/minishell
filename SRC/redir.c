@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajuvin <ajuvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 01:06:58 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/04/13 12:37:50 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:14:41 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	redir_heredoc(t_redir *redir)
+void	heredoc_loop(int *pipefd, t_redir *redir)
 {
 	char	*rl;
-	int		pipefd[2];
 
-	if (pipe(pipefd) == -1)
-		return (-1);
+	close(pipefd[0]);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -36,7 +34,30 @@ int	redir_heredoc(t_redir *redir)
 		free(rl);
 	}
 	close(pipefd[1]);
-	return (pipefd[0]);
+}
+
+int	redir_heredoc(t_redir *redir)
+{
+	int		pipefd[2];
+	int		status;
+	pid_t	pid_son;
+
+	if (pipe(pipefd) == -1)
+		return (-1);
+	pid_son = fork();
+	if (pid_son == -1)
+		return (-1);
+	if (pid_son == 0)
+	{
+		heredoc_loop(pipefd, redir);
+		exit(0);
+	}
+	else
+	{
+		close(pipefd[1]);
+		waitpid(pid_son, &status, 0);
+		return (pipefd[0]);
+	}
 }
 
 int	redir_open(t_redir *r)
@@ -49,6 +70,8 @@ int	redir_open(t_redir *r)
 			r->fd = open(r->target, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		else if (r->type == TOKEN_APPEND)
 			r->fd = open(r->target, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else if (r->type == TOKEN_HEREDOC)
+			r->fd = redir_heredoc(r);
 		if (r->fd < 0)
 		{
 			perror(r->target);
@@ -57,23 +80,6 @@ int	redir_open(t_redir *r)
 		r = r->next;
 	}
 	return (0);
-}
-
-void	redir_open_heredoc(t_redir *r)
-{
-	while (r)
-	{
-		if (r->type == TOKEN_HEREDOC)
-			r->fd = redir_heredoc(r);
-		else
-			return ;
-		if (r->fd < 0)
-		{
-			perror(r->target);
-			exit(EXIT_FAILURE);
-		}
-		r = r->next;
-	}
 }
 
 void	redir_exec(t_redir *r)

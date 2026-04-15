@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajuvin <ajuvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 12:58:45 by ajuvin            #+#    #+#             */
-/*   Updated: 2026/04/13 15:42:25 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:09:21 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	child_process(t_cmd *cmds, t_shell *shell, int *pipefd, int prev_fd)
 	redir_exec(cmds->redir);
 	if (!cmds->argv || !cmds->argv[0])
 		exit_child_process(cmds, shell, 0);
-	if (is_builtin_cmd(cmds->argv[0]))
+	if (is_builtin(cmds->argv[0]))
 	{
 		builtin_cmd(cmds, shell);
 		exit_child_process(cmds, shell, 0);
@@ -61,7 +61,6 @@ void	pipe_exec(t_cmd *cmds, pid_t *pid_son, t_shell *shell, int *prev_fd)
 
 	pipefd[0] = -1;
 	pipefd[1] = -1;
-	redir_open_heredoc(cmds->redir);
 	if (cmds->next)
 	{
 		if (pipe(pipefd) == -1)
@@ -104,14 +103,14 @@ int	exec(t_cmd *cmds, t_shell *shell)
 	pid_t	pid_son;
 
 	prev_fd = -1;
-	if (cmds->argv && is_builtin_cmd(cmds->argv[0])
-		&& !cmds->next && !cmds->redir)
+	if (cmds->argv && is_builtin(cmds->argv[0]) && !cmds->next && !cmds->redir)
 		return (builtin_cmd(cmds, shell));
 	while (cmds)
 	{
-		if (exec_cmds(cmds) == 0 || exec_cmds(cmds) == 1)
-			return (exec_cmds(cmds));
-		else if (exec_cmds(cmds) == -1)
+		status = exec_cmds(cmds);
+		if (status == 0 || status == 1)
+			return (close_all_redirs(cmds->redir), status);
+		else if (status == -1)
 			continue ;
 		pipe_exec(cmds, &pid_son, shell, &prev_fd);
 		close_all_redirs(cmds->redir);

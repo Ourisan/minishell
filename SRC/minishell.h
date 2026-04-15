@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lde-plac <lde-plac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajuvin <ajuvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:37:22 by lde-plac          #+#    #+#             */
-/*   Updated: 2026/04/13 14:26:55 by lde-plac         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:07:54 by ajuvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	close_pipe(int *pipefd);
 
 /* Exec Builtins */
 int		builtin_cmd(t_cmd *cmd, t_shell *shell);
-int		is_builtin_cmd(char *cmd);
+int		is_builtin(char *cmd);
 
 /* Redir */
 int		redir_open(t_redir *r);
